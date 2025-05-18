@@ -28,11 +28,7 @@ interface Post {
 }
 
 // Define the props for PostPage
-interface PostPageProps {
-  params: {
-    id: string;
-  };
-}
+
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
