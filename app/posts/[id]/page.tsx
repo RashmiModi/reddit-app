@@ -2,7 +2,10 @@
 
 import { use } from 'react';
 import { fetchPostById } from '@/app/action';
-
+interface Vote {
+  type: number;
+  // other properties if needed
+}
 export default function PostPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const post = use(fetchPostById(id));
@@ -12,9 +15,9 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
   }
 
   // Calculate vote count
- const voteCount = post.votes.reduce<number>((total, vote) => {
-  return vote.type === 1 ? total + 1 : total - 1;
-}, 0);
+  const voteCount = post.votes.reduce((total:number, vote:Vote) => {
+    return vote.type === 1 ? total + 1 : total - 1;
+  }, 0);
 
   return (
   <div className="flex items-center justify-center min-h-screen bg-gray-100">
