@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import prisma from "@/lib/redditdb"; // make sure this is your prisma client path
 
-const prisma = new PrismaClient();
+//const prisma = new PrismaClient();
 
 export async function GET(req: Request) {
   const url = new URL(req.url);

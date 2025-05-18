@@ -1,8 +1,8 @@
 // app/api/posts/route.ts
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import prisma from "@/lib/redditdb"; // make sure this is your prisma client path
 
-const prisma = new PrismaClient();
+//const prisma = new PrismaClient();
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
