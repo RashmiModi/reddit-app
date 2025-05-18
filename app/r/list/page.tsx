@@ -1,10 +1,19 @@
-// pages/api/subreddits.ts
 'use client';
+
 import { Button } from '@/components/ui/button'; // Ensure this path is correct
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { getSubreddits } from '@/app/action';
 import { Separator } from "@/components/ui/separator";
+
+// Define the User interface
+interface User {
+  id: string;
+  email: string;
+  username: string;
+}
+
+// Define the Subreddit interface
 interface Subreddit {
   id: string;
   name: string;
@@ -12,22 +21,26 @@ interface Subreddit {
   updatedAt: Date | string;
   userId: string | null;
   description: string | null;
-  user: {
-    username: string;
-  } // The user object may be null if no user is associated
+  user: User | null;
 }
-  
-  export default function SubredditList() {
+
+export default function SubredditList() {
   const [subreddits, setSubreddits] = useState<Subreddit[]>([]);
 
   useEffect(() => {
     async function fetchSubreddits() {
       try {
         const data = await getSubreddits();
-       setSubreddits(data.map(subreddit => ({
-  ...subreddit,
-  user: subreddit.user || { username: 'Unknown' }, // Provide a default if user is null
-})));
+        setSubreddits(
+          data.map((subreddit: Subreddit) => ({
+            ...subreddit,
+            user: subreddit.user ?? {
+              id: '',
+              email: '',
+              username: 'Unknown',
+            },
+          }))
+        );
       } catch (error) {
         console.error('Error fetching subreddits:', error);
       }
@@ -37,7 +50,6 @@ interface Subreddit {
   }, []);
 
   return (
-  
     <div className="p-4">
       {/* Create New Subreddit Button */}
       <div className="mb-6">
@@ -56,9 +68,9 @@ interface Subreddit {
             className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
           >
             <h2 className="text-xl font-semibold text-gray-800 mb-2">
-             <Link href={`/r/${encodeURIComponent(subreddit.name)}`}>
-  r/{subreddit.name}
-</Link>
+              <Link href={`/r/${encodeURIComponent(subreddit.name)}`}>
+                r/{subreddit.name}
+              </Link>
             </h2>
             <p className="text-gray-600">
               Join the discussion in r/{subreddit.name}
@@ -76,19 +88,15 @@ interface Subreddit {
               })}
             </p>
 
-            {subreddit.user ? (
-              <p className="text-gray-600">
-                Created by:{' '}
-                <Link
-                  href={`/r/profile-page/${subreddit.user.username}`}
-                  className="text-blue-500 hover:underline"
-                >
-                  {subreddit.user.username}
-                </Link>
-              </p>
-            ) : (
-              <p className="text-gray-600">Created by: Unknown</p>
-            )}
+            <p className="text-gray-600">
+              Created by:{' '}
+              <Link
+                href={`/r/profile-page/${subreddit.user?.username}`}
+                className="text-blue-500 hover:underline"
+              >
+                {subreddit.user?.username}
+              </Link>
+            </p>
           </div>
         ))}
       </div>
