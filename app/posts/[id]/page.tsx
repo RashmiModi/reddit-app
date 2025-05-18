@@ -1,7 +1,6 @@
 // app/posts/[id]/page.tsx
 
 import { fetchPostById } from '@/app/action';
-import type { Metadata } from 'next';
 
 interface Vote {
   type: number; // 1 for upvote, -1 for downvote
@@ -25,26 +24,9 @@ interface Post {
   comments: Comment[];
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const post: Post | null = await fetchPostById(params.id);
-
-  if (!post) {
-    return {
-      title: 'Post Not Found',
-    };
-  }
-
-  const voteCount = post.votes.reduce((total: number, vote: Vote) => {
-    return vote.type === 1 ? total + 1 : total - 1;
-  }, 0);
-
-  return {
-    title: post.title,
-    description: `By ${post.user.username} | Votes: ${voteCount}`,
-  };
-}
-export default async function PostPage({ params }: { params: { id: string } }) {
-  const post: Post | null = await fetchPostById(params.id);
+export default async function PostPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const post: Post | null = await fetchPostById(id);
 
   if (!post) {
     return <div>Post not found</div>;
