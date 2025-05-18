@@ -12,9 +12,9 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
   }
 
   // Calculate vote count
-  const voteCount = post.votes.reduce((total, vote) => {
-    return vote.type === 1 ? total + 1 : total - 1;
-  }, 0);
+ const voteCount = post.votes.reduce<number>((total, vote) => {
+  return vote.type === 1 ? total + 1 : total - 1;
+}, 0);
 
   return (
   <div className="flex items-center justify-center min-h-screen bg-gray-100">
