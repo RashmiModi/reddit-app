@@ -5,12 +5,15 @@ import Link from 'next/link';
 interface ProfilePageProps {
   params: Promise<{ username: string }>;
 }
-
+interface Post {
+  id: string;
+  title: string;
+}
 const ProfilePage = async ({ params }: ProfilePageProps) => {
   const { username } = await params;
   const encodedUserName = encodeURIComponent(username);
   console.log("user-----> profilepage", username);
-  const posts = await getUserPostswithFirstName(username);
+  const posts: Post[] = await getUserPostswithFirstName(username);
 
   if (!posts) {
     return (
@@ -30,7 +33,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
         <h2 className="text-xl font-semibold mb-2">Posts</h2>
         {posts.length > 0 ? (
           <ul className="space-y-2">
-            {posts.map((post) => (
+            {posts.map((post: Post) => (
               <li key={post.id} className="border-b pb-2">
                 <Link href={`/posts/${post.id}`} className="text-blue-600 hover:underline">
                   {post.title}
