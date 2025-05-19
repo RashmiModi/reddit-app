@@ -56,20 +56,20 @@ export default function VoteButtons({
       <div className="flex items-center gap-2">
         <button
           onClick={() => handleVote(1)}
-          className={`text-sm ${userVote === 1 ? "text-blue-600" : "text-gray-400"}`}
+          className={`text-2xl ${userVote === 1 ? "text-blue-600" : "text-gray-400"}`}
           disabled={isVoting}
         >
-          ▲ Upvote
+           👍
         </button>
-        <span className="text-sm">Upvotes: {upvotes}</span>
+        <span className="text-lg">: {upvotes}</span>
         <button
           onClick={() => handleVote(-1)}
-          className={`text-sm ${userVote === -1 ? "text-red-600" : "text-gray-400"}`}
+          className={`text-2xl ${userVote === -1 ? "text-red-600" : "text-gray-400"}`}
           disabled={isVoting}
         >
-          ▼ Downvote
+           👎
         </button>
-        <span className="text-sm">Downvotes: {downvotes}</span>
+        <span className="text-lg">: {downvotes}</span>
       </div>
       {errorMessage && <p className="text-red-500 text-xs">{errorMessage}</p>}
     </div>
