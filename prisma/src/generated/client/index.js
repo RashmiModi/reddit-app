@@ -191,6 +191,10 @@ const config = {
         "fromEnvVar": null,
         "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "rhel-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -217,8 +221,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./src/generated/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id       String @id @default(cuid())\n  email    String @unique\n  username String @unique\n  posts    Post[]\n\n  subreddits Subreddit[]\n  votes      Vote[]\n  comments   Comment[]\n}\n\nmodel Subreddit {\n  id          String   @id @default(cuid())\n  name        String   @unique\n  description String?\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n  user        User?    @relation(fields: [userId], references: [id])\n  userId      String?\n  posts       Post[]\n}\n\nmodel Post {\n  id          String    @id @default(cuid())\n  title       String\n  textContent Json?\n  imageString String?\n  createdAt   DateTime  @default(now())\n  updatedAt   DateTime  @updatedAt\n  subName     String\n  Subreddit   Subreddit @relation(fields: [subName], references: [name])\n\n  user     User      @relation(fields: [userId], references: [id])\n  userId   String\n  votes    Vote[]\n  comments Comment[]\n}\n\nmodel Vote {\n  id        Int      @id @default(autoincrement())\n  type      Int // 1 for upvote, -1 for downvote\n  user      User     @relation(fields: [userId], references: [id])\n  userId    String\n  post      Post     @relation(fields: [postId], references: [id])\n  postId    String\n  createdAt DateTime @default(now())\n\n  @@unique([userId, postId]) // Ensures a user can vote only once per post\n}\n\nmodel Comment {\n  id        String   @id @default(cuid())\n  content   String\n  createdAt DateTime @default(now())\n\n  user   User   @relation(fields: [userId], references: [id])\n  userId String\n\n  post   Post   @relation(fields: [postId], references: [id])\n  postId String\n}\n",
-  "inlineSchemaHash": "c2b2466b72bd4749b78cde427742051bb46d898ec79242a1fffeae57bc45b100",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"./src/generated/client\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id       String @id @default(cuid())\n  email    String @unique\n  username String @unique\n  posts    Post[]\n\n  subreddits Subreddit[]\n  votes      Vote[]\n  comments   Comment[]\n}\n\nmodel Subreddit {\n  id          String   @id @default(cuid())\n  name        String   @unique\n  description String?\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n  user        User?    @relation(fields: [userId], references: [id])\n  userId      String?\n  posts       Post[]\n}\n\nmodel Post {\n  id          String    @id @default(cuid())\n  title       String\n  textContent Json?\n  imageString String?\n  createdAt   DateTime  @default(now())\n  updatedAt   DateTime  @updatedAt\n  subName     String\n  Subreddit   Subreddit @relation(fields: [subName], references: [name])\n\n  user     User      @relation(fields: [userId], references: [id])\n  userId   String\n  votes    Vote[]\n  comments Comment[]\n}\n\nmodel Vote {\n  id        Int      @id @default(autoincrement())\n  type      Int // 1 for upvote, -1 for downvote\n  user      User     @relation(fields: [userId], references: [id])\n  userId    String\n  post      Post     @relation(fields: [postId], references: [id])\n  postId    String\n  createdAt DateTime @default(now())\n\n  @@unique([userId, postId]) // Ensures a user can vote only once per post\n}\n\nmodel Comment {\n  id        String   @id @default(cuid())\n  content   String\n  createdAt DateTime @default(now())\n\n  user   User   @relation(fields: [userId], references: [id])\n  userId String\n\n  post   Post   @relation(fields: [postId], references: [id])\n  postId String\n}\n",
+  "inlineSchemaHash": "89c15c83f915848880179066d93c655380b402296f49ba15bcc7b3581389975a",
   "copyEngine": true
 }
 
@@ -259,6 +263,10 @@ Object.assign(exports, Prisma)
 // file annotations for bundling tools to include these files
 path.join(__dirname, "query_engine-windows.dll.node");
 path.join(process.cwd(), "prisma/src/generated/client/query_engine-windows.dll.node")
+
+// file annotations for bundling tools to include these files
+path.join(__dirname, "libquery_engine-rhel-openssl-3.0.x.so.node");
+path.join(process.cwd(), "prisma/src/generated/client/libquery_engine-rhel-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "prisma/src/generated/client/schema.prisma")
