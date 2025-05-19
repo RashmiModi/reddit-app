@@ -34,9 +34,12 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "tailwind.config.ts",
-    "tailwind.config.ts"
+    "tailwind.config.ts",
+     "node_modules",
+      "src/generated/client",
+    "src/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+   
   ]
 }
